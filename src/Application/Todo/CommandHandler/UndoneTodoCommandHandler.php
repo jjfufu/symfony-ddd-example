@@ -16,9 +16,14 @@ final readonly class UndoneTodoCommandHandler implements CommandHandlerInterface
     ) {
     }
 
-    public function __invoke(UndoneTodoCommand $command): Todo
+    public function __invoke(UndoneTodoCommand $command): ?Todo
     {
         $todo = $this->todoRepository->get($command->getId());
+
+        if (null === $todo) {
+            return null;
+        }
+
         $todo->markUndone();
         $this->todoRepository->save($todo);
 
