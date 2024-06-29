@@ -13,7 +13,7 @@ class Todo
     private ?\DateTimeImmutable $doneAt = null;
 
     public function __construct(
-        private readonly int $id,
+        private int $id,
         string $title,
         ?string $description = null
     ) {
@@ -25,6 +25,11 @@ class Todo
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getTitle(): string
