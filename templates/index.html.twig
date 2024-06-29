@@ -1,1 +1,113 @@
 {% extends 'base.html.twig' %}
+
+{% block body %}
+    <section>
+        <nav>
+            <turbo-frame id="edit">
+                <div class="flex justify-end">
+                    <a href="{{ path('todos_create') }}"  class="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50">
+                        Add
+                        {{ ux_icon('heroicons:plus-16-solid', {class: 'h-4 w-4'}) }}
+                    </a>
+                </div>
+            </turbo-frame>
+        </nav>
+
+        <div class="rounded-lg bg-white shadow mt-4">
+            <div class="p-6">
+                <turbo-frame id="todos">
+                    <ul class="divide-y divide-gray-100">
+                        {% if todos|length == 0 %}
+                            <li class="py-5 text-center">
+                                <div class="flex justify-between gap-x-6 items-center">
+                                    <div class="min-w-0 flex-auto">
+                                        <p class="text-sm font-semibold leading-6 text-gray-900">No todos found</p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+
+
+                        {% for todo in todos %}
+                            <li class="flex justify-between gap-x-6 py-5 items-center">
+                                <div class="flex min-w-0 gap-x-4">
+                                    <div class="min-w-0 flex-auto">
+                                        <p class="text-sm font-semibold leading-6 text-gray-900">{{ todo.title }}</p>
+                                        <p class="mt-1 truncate text-xs leading-5 text-gray-500 truncate">{{ todo.description }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-x-3 items-center">
+                                    {% if todo.done %}
+                                        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                            <form action="{{ path('todos_undone', {'id': todo.id}) }}" method="post">
+                                                <button type="submit" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                    <span>Undone</span>
+                                                    {{ ux_icon('heroicons:arrow-uturn-left-16-solid', {class: 'h-4 w-4'}) }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                            <form action="{{ path('todos_done', {'id': todo.id}) }}" method="post">
+                                                <button type="submit" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                    <span>Done</span>
+                                                    {{ ux_icon('heroicons:check-16-solid', {class: 'h-4 w-4'}) }}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+                                    <div
+                                         class="relative inline-block"
+                                        {{ stimulus_controller('dropdown', {open: false}) }}
+                                         data-action="click@window->dropdown#hide keydown.esc->dropdown#hide"
+                                    >
+                                        <div>
+                                            <button
+                                                {{ stimulus_action('dropdown', 'toggle:stop', 'click') }}
+                                                type="button"
+                                                class="inline-flex w-full justify-center gap-x-1.5 px-3 py-2 text-sm font-semibold text-gray-700"
+                                            >
+                                                {% block icon %}
+                                                    {{ ux_icon('heroicons:ellipsis-vertical-16-solid', {class: 'h-5 w-5'}) }}
+                                                {% endblock %}
+                                            </button>
+                                        </div>
+
+                                        <div
+                                            data-transition-enter="transition ease-out duration-100"
+                                            data-transition-enter-from="transform opacity-0 scale-95"
+                                            data-transition-enter-to="transform opacity-100 scale-100"
+                                            data-transition-leave="transition ease-in duration-75"
+                                            data-transition-leave-from="transform opacity-100 scale-100"
+                                            data-transition-leave-to="transform opacity-0 scale-95"
+                                            {{ stimulus_target('dropdown', 'menu') }}
+                                            class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <div class="py-1">
+                                                <form action="{{ path('todos_remove', {'id': todo.id}) }}" method="post">
+                                                    <button type="submit" class="flex justify-between items-center px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                                <a data-turbo-frame="edit" href="{{ path('todos_update', {'id': todo.id}) }}" class="flex justify-between items-center px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+                                                    Edit
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+                        {% if todos|length > 0 %}
+                            <li class="pt-4 text-center">
+                                <p class="text-xs text-gray-400">{{ doneTodos }} todos done on {{ todos|length }}</p>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </turbo-frame>
+            </div>
+        </div>
+    </section>
+{% endblock %}

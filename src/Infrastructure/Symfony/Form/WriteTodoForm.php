@@ -45,10 +45,6 @@ class WriteTodoForm extends AbstractType
                         'max' => 255,
                     ]),
                 ]),
-                'description' => new Length([
-                    'min' => 0,
-                    'max' => 1000,
-                ]),
             ],
         ]);
     }

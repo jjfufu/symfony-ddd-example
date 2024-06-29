@@ -1,0 +1,16 @@
+<turbo-frame id="edit">
+    <div class="rounded-lg bg-white shadow">
+        <div class="p-4">
+            {{ form_start(form) }}
+            {{ form_row(form.title, {attr: {class: 'mb-4'}}) }}
+            {{ form_row(form.description) }}
+
+            <button data-turbo="false" type="submit" class="mt-4 inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <span>Save</span>
+                {{ ux_icon('heroicons:plus-16-solid', {class: 'h-4 w-4'}) }}
+            </button>
+
+            {{ form_rest(form) }}
+        </div>
+    </div>
+</turbo-frame>
