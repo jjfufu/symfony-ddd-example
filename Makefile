@@ -42,6 +42,8 @@ test: ## Start tests with phpunit, pass the parameter "c=" to add options to php
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
 
+phpcs:
+	@$(PHP_CONT) ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php
 
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
@@ -59,3 +61,18 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+db:
+	$(DOCKER_COMP) exec php bin/console doctrine:database:drop --force --if-exists
+	$(DOCKER_COMP) exec php bin/console doctrine:database:create --if-not-exists
+	$(DOCKER_COMP) exec php bin/console doctrine:schema:update --force --complete
+
+fixtures:
+	$(DOCKER_COMP) exec php bin/console doctrine:fixtures:load -q
+
+tailwindbuild:
+	$(DOCKER_COMP) exec php bin/console tailwind:build --watch
+
+icon:
+	@$(eval c ?=)
+	@$(DOCKER_COMP) exec php bin/console ux:icons:import heroicons:$(c)

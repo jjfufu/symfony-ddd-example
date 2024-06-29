@@ -17,8 +17,21 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Infrastructure/Doctrine'
-            - '../src/Kernel.php'     
+            - '../src/Infrastructure/Doctrine/Mapping/'
+            - '../src/Infrastructure/Doctrine/Migrations/'
+            - '../src/Kernel.php'
+    
+    _instanceof:
+        # CQRS
+        App\Infrastructure\Messenger\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+        App\Infrastructure\Messenger\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+        App\Infrastructure\Messenger\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }        
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
