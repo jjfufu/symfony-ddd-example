@@ -26,8 +26,9 @@ This project serves as a demonstration of implementing Domain-Driven Design (DDD
 2. Run `make build` to build fresh images
 3. Run `make up` to set up and start a fresh Symfony project
 4. Run `make db && make fixtures` to set up database schema and load fixtures
-5. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-6. Run `make down` to stop the Docker containers.
+5. Run `make tailwindbuild` to set build Tailwind CSS
+6. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
+7. Run `make down` to stop the Docker containers.
 
 ## Disclaimer: Utilization of Domain-Driven Design (DDD)
 
